@@ -14,11 +14,9 @@ module.exports = {
   	},
   	file:{
   		type:'string',
-  		required:true
   	},
     round:{
       type:'string',
-      required:true
     },
   	uploads:{
   		type:'object',

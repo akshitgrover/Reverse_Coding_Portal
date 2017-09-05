@@ -6,6 +6,17 @@
  */
 
 module.exports = {
+	create:function(req,res){
+		Question.create({number:req.param('number')},function(err,que){
+			console.log(err);
+			if(err){
+				return res.json(500,{err:"Something Went Wrong."});
+			}
+			que.round=req.param('round');
+			que.save();
+			return res.json(200,{msg:"Successs"});
+		});
+	},
 	upload:function(req,res){
 		Team.findOne({username:req.param('username')},function(err,user){
 			if(!user){
@@ -24,7 +35,16 @@ module.exports = {
 						q.save();
 						console.log(q.uploads);
 						console.log(user.roundone);
-						return res.json(200,{msg:"Files Uploaded Successfully"});
+						return res.json(200,{msg:"Files Uploaded Successfully."});
+					}
+					else if(req.param('round')=='two'){
+						user.roundtwo[req.param('que')]=files[0].fd;
+						user.save();
+						q.uploads[req.param('username')]=files[0].fd;
+						q.save();
+						console.log(q.uploads);
+						console.log(user.roundtwo);
+						return res.json(200,{msg:"Files uploaded Successfully."});
 					}
 					else{
 						return res.json(500,{err:'Something Went Wrong. Please Upload Again.'});
@@ -49,7 +69,7 @@ module.exports = {
         });
     },
     getquefiles:function(req,res){
-    	Question.findOne({number:req.param('que')},function(err,q){
+    	Question.findOne({number:req.param('que'),round:req.param('round')},function(err,q){
     		if(err || !q){
     			return res.json(500,{err:"Something Went Wrong, Please Try Again."});
     		}

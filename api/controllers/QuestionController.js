@@ -8,7 +8,7 @@
 module.exports = {
 	create:function(req,res){
 		User.findOne({username:req.param('username')},function(err,user){
-			if(!user){
+			if(!user || err){
 				return res.json(500,{err:"Invalid Username/Password."});
 			}
 			var bcrypt=require('bcrypt-nodejs');
@@ -91,7 +91,7 @@ module.exports = {
     },
     getquefiles:function(req,res){
     	User.findOne({username:req.param('username')},function(err,user){
-			if(!user){
+			if(!user || err){
 				return res.json(500,{err:"No Such Record Of The User, Please Login."});
 			}
 			var bcrypt=require('bcrypt-nodejs');
@@ -110,7 +110,7 @@ module.exports = {
     },
     getteamfiles:function(req,res){
 		User.findOne({username:req.param('username')},function(err,user){
-	    	if(!user){
+	    	if(!user || err){
 	    		return res.json(500,{err:"Invalid Username/Password."});
 	    	}
 	    	var bcrypt=require('bcrypt-nodejs');

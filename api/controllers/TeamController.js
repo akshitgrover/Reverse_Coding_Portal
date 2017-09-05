@@ -61,6 +61,29 @@ module.exports = {
 			team.save();
 			return res.json(200,{msg:"Logged Out Successfully."});
 		});
-	}
+	},
+	getdetails:function(req,res){
+		User.findOne({username:req.param('username')},function(err,user){
+			if(err || !user){
+				return res.json(500,{err:"Something Went Wrong."});
+			}
+			var bcrypt=require('bcrypt-nodejs');
+			bcrypt.compare(req.param('password'),user.password,function(err,rest){
+				if(!rest){
+					return res.json(500,{err:"Invalid Username/Password."});
+				}
+				Team.find(function(err,teams){
+					if(err){
+						return res.json(500,{err:"Something Went Wrong."});
+					}
+					var array=[];
+					teams.forEach(function(team){
+						array.push(team.username);
+					});
+					return res.json(200,{teams:array});
+				});
+			});
+		});
+	}	
 };
 

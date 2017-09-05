@@ -21,7 +21,7 @@
     "grunt-sync": "0.5.2",
     "include-all": "^1.0.0",
     "jsonwebtoken": "^7.4.3",
-    "npm": "^5.4.0",
+    "npm": "^5.3.0",
     "rc": "1.0.1",
     "request": "^2.81.0",
     "sails": "~0.12.13",

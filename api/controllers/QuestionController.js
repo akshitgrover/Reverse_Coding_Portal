@@ -128,19 +128,24 @@ module.exports = {
     	});
     },
     getquestion:function(req,res){
-    	var roundone={};
-    	var roundtwo={};
-    	var base="localhost:1337/"
-    	Question.find(function(err,ques){
+      	Question.find(function(err,ques){
+      		if(err){
+      			return res.json(500,{err:"Something Went Wrong."});
+      		}
+      	    var roundone={};
+    		var roundtwo={};
+    		var base="";
     		ques.forEach(function(que){
     			if(que.round=="one"){
-    				roundone[que.number]=base+"/assets/files/"+que.number;
+    				roundone[que.number]=que.file;
     				console.log(roundone);
     			}
     			else{
-    				//roundone[que.number]=base+que.file;
+    				roundtwo[que.number]=que.file;
+    				console.log(roundtwo);
     			}
     		});
+    		return res.json(200,{queroundone:roundone,queroundtwo:roundtwo});
     	});
     }
 };

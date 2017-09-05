@@ -39,7 +39,7 @@ module.exports = {
 				bcrypt.compare(req.param('password'),data.password,function(err,rest){
 					console.log(data.password);
 					if(rest){
-						return res.json(200,{message:"Logged In Successfully."});
+						return res.json(200,{message:"Logged In Successfully.",token:jwt.issue({id:data.id})});
 					}
 					else{
 						return res.json(200,{err:"Invalid Username/Password."});
@@ -49,6 +49,17 @@ module.exports = {
 			else{
 				res.json(200,{err:"Invalid Username/Password."})
 			}
+		});
+	},
+	logout:function(req,res){
+		Team.findOne({username:req.param('username')},function(err,team){
+			if(err){
+				return res.json(500,{err:"Something Went Wrong."});
+			}
+			team.expiredtokens=[];
+			team.expiredtokens.push(req.param('token'));
+			team.save();
+			return res.json(200,{msg:"Logged Out Successfully."});
 		});
 	}
 };

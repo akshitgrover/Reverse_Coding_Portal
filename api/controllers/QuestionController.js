@@ -80,7 +80,7 @@ module.exports = {
         });
         var fd = req.param('fd');
         adapter.read(fd, function(err , file) {
-            if(error) {
+            if(err) {
                 return res.json(500,{err:"Something Went Wrong While Downloading The File."});
             } 
             else {

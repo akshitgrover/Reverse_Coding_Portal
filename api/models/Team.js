@@ -24,14 +24,14 @@ module.exports = {
   	phoneno:{
   		type:'string',
   	},
-  	members:{
-  		type:'array',
-  		defaultsTo:[]
+  	roundone:{
+  		type:'object',
+  		defaultsTo:{}
   	},
-  	uploads:{
-  		type:'array',
-  		defaultsTo:[]
-  	}
+    roundtwo:{
+      type:'object',
+      defaultsTo:{}
+    }
   }
 };
 

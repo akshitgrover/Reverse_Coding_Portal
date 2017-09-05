@@ -6,23 +6,23 @@
  */
 
 module.exports = {
+	'up':function(req,res){
+		res.view();
+	},
 	create:function(req,res){
 		if(req.param('password')!=req.param('confirmpassword')){
-			return res.json(501,{err:"Passwords Didn't Match."});
+			return res.json(500,{err:"Passwords Didn't Match."});
 		}
 		Team.create({username:req.param('username')},function(err,data){
 			if(err){
-				return res.json(501,{err:"Something Went Wrong."});
+				console.log(err);
+				return res.json(500,{err:"Something Went Wrong."});
 			}
 			var bcrypt=require('bcrypt-nodejs');
 			data.password=bcrypt.hashSync(req.param('password'));
 			data.confirmpassword=data.password;
 			data.email=req.param('email');
 			data.phoneno=req.param('phoneno');
-			data.members.push(req.param('mem1'));
-			if(req.param('mem2')){
-				data.members.push(req.param('mem2'));
-			}
 			data.save();
 			console.log(data);
 			return res.json(200,{message:"Success."});
@@ -31,7 +31,7 @@ module.exports = {
 	login:function(req,res){
 		Team.findOne({username:req.param('username')},function(err,data){
 			if(err){
-				return res.json(501,{err:"Something Went Wrong."});
+				return res.json(500,{err:"Something Went Wrong."});
 			}
 			if(data){
 				console.log(data);

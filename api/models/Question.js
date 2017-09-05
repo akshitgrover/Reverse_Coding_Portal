@@ -8,21 +8,21 @@
 module.exports = {
 
   attributes: {
-  	round:{
-  		type:'string',
-  		required:true
-  	},
   	number:{
   		type:'string',
   		required:true
   	},
   	file:{
   		type:'string',
-  		reuired:true
+  		required:true
   	},
+    round:{
+      type:'string',
+      required:true
+    },
   	uploads:{
-  		type:'array',
-  		defaultsTo:[]
+  		type:'object',
+  		defaultsTo:{}
   	}
   }
 };

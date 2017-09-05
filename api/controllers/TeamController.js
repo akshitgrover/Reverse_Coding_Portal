@@ -13,19 +13,27 @@ module.exports = {
 		if(req.param('password')!=req.param('confirmpassword')){
 			return res.json(500,{err:"Passwords Didn't Match."});
 		}
-		Team.create({username:req.param('username')},function(err,data){
+		Team.findOne({username:req.param('username')},function(err,data){
 			if(err){
-				console.log(err);
 				return res.json(500,{err:"Something Went Wrong."});
 			}
-			var bcrypt=require('bcrypt-nodejs');
-			data.password=bcrypt.hashSync(req.param('password'));
-			data.confirmpassword=data.password;
-			data.email=req.param('email');
-			data.phoneno=req.param('phoneno');
-			data.save();
-			console.log(data);
-			return res.json(200,{message:"Success."});
+			if(data){
+				return res.json(200,{err:"Username Already Exists."});
+			}
+			Team.create({username:req.param('username')},function(err,data){
+				if(err){
+					console.log(err);
+					return res.json(500,{err:"Something Went Wrong."});
+				}
+				var bcrypt=require('bcrypt-nodejs');
+				data.password=bcrypt.hashSync(req.param('password'));
+				data.confirmpassword=data.password;
+				data.email=req.param('email');
+				data.phoneno=req.param('phoneno');
+				data.save();
+				console.log(data);
+				return res.json(200,{message:"Success."});
+			});
 		});
 	},
 	login:function(req,res){

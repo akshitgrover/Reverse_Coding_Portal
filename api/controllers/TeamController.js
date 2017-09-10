@@ -30,6 +30,7 @@ module.exports = {
 				data.confirmpassword=data.password;
 				data.email=req.param('email');
 				data.phoneno=req.param('phoneno');
+				data.expiredtokens=[];
 				data.save();
 				console.log(data);
 				return res.json(200,{message:"Success."});
@@ -86,7 +87,7 @@ module.exports = {
 					}
 					var array=[];
 					teams.forEach(function(team){
-						array.push(team.username);
+						array.push({teamname:team.username,phoneno:team.phoneno,email:team.email});
 					});
 					return res.json(200,{teams:array});
 				});

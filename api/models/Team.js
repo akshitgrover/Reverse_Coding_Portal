@@ -35,7 +35,7 @@ module.exports = {
     expiredtokens:{
       type:'array',
       defaultsTo:[]
-    }
+    },
   }
 };
 

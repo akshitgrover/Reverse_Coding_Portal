@@ -8,7 +8,7 @@ module.exports.issue = function(payload) {
     payload,
     tokenSecret, // Token Secret that we sign it with
     {
-      expiresIn : 1800 // Token Expire time
+      expiresIn : "3h" // Token Expire time
     }
   );
 };
@@ -21,4 +21,8 @@ module.exports.verify = function(token, callback) {
     {}, // No Option, for more see https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback
     callback //Pass errors or decoded token to callback
   );
+};
+
+module.exports.decode = function(token){
+  return jwt.decode(token);
 };

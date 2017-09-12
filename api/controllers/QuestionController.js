@@ -3,6 +3,7 @@
  *
  * @description :: Server-side logic for managing questions
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ * @baseurl 	:: https://reverse-coding-acm.herokuapp.com/
  */
 
 module.exports = {

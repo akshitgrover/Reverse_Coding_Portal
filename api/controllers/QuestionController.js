@@ -44,7 +44,7 @@ module.exports = {
 				if(!q){
 					return res.json(404,{err:"Question you are requesting is not found."});
 				}
-				req.file('file').upload({adapter:require('skipper-gridfs'),uri:'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs',filename:'deathadder'},function(err,files){
+				req.file('file').upload({adapter:require('skipper-gridfs'),uri:'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'},function(err,files){
 					console.log(err||files);
 					if(files==[]){
 						return res.json(404,{err:"Please Upload The File."})
@@ -192,20 +192,24 @@ module.exports = {
       		if(err){
       			return res.json(500,{err:"Something Went Wrong."});
       		}
-      	    var roundone={};
-    		var roundtwo={};
-    		var base="";
+      	    var roundoneexe={};
+      	    var roundonejar={};
+      	    var roundtwoexe={};
+    		var roundtwojar={};
+    		var base="https://reverse-coding-acm.herokuapp.com/";
     		ques.forEach(function(que){
     			if(que.round=="one"){
-    				roundone[que.number]=que.file;
+    				roundoneexe[que.number]=que.fileexe;
+    				roundonejar[que.number]=que.filejar;
     				console.log(roundone);
     			}
     			else{
-    				roundtwo[que.number]=que.file;
+    				roundtwoexe[que.number]=que.fileexe;
+    				roundtwojar[que.number]=que.filejar;
     				console.log(roundtwo);
     			}
     		});
-    		return res.json(200,{queroundone:roundone,queroundtwo:roundtwo});
+    		return res.json(200,{queroundoneexe:roundoneexe,queroundonejar:roundonejar,queroundtwoexe:roundtwoexe,queroundtwojar:roundtwojar});
     	});
     }
 };

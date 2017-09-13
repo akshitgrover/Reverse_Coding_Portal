@@ -12,9 +12,12 @@ module.exports = {
   		type:'string',
   		required:true
   	},
-  	file:{
+  	fileexe:{
   		type:'string',
   	},
+    filejar:{
+      type:'string',
+    },
     round:{
       type:'string',
     },

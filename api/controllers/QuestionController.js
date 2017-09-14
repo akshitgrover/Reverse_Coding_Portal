@@ -38,6 +38,8 @@ module.exports = {
 				return res.json(500,{err:"You Are Not Authorized, Login Again."});
 			}
 			Question.findOne({number:req.param('que'),round:req.param('round')},function(err,q){
+				console.log(req.param('que'));
+				console.log(req.param('round'));
 				if(err){
 					return res.json(500,{err:"Something Went Wrong. Please Upload Again."});
 				}

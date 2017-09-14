@@ -38,9 +38,9 @@ module.exports = {
 			if(!user || n!=-1){
 				return res.json(500,{err:"You Are Not Authorized, Login Again."});
 			}
-			Question.findOne({number:req.param('que'),round:req.param('round')},function(err,q){
-				console.log(req.param('que'));
-				console.log(req.param('round'));
+			Question.findOne({number:req.body.que,round:req.body.round},function(err,q){
+				console.log(req.body.que);
+				console.log(req.body.round);
 				if(err){
 					return res.json(500,{err:"Something Went Wrong. Please Upload Again."});
 				}
@@ -85,7 +85,6 @@ module.exports = {
 					else if(req.param('round')=='two'){
 						console.log(user.roundtwo[req.param('que')]);
 						if(user.roundtwo[req.param('que')]){
-							console.log("TEST");
 							adapter.rm(user.roundtwo[req.param('que')],function(err,data){
 								if(err){
 									console.log("err");

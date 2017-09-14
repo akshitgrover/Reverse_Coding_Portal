@@ -32,6 +32,8 @@ module.exports = {
 				data.email=req.param('email');
 				data.phoneno=req.param('phoneno');
 				data.expiredtokens=[];
+				data.roundone={};
+				data.roundtwo={};
 				data.save();
 				console.log(data);
 				return res.json(200,{message:"Success."});

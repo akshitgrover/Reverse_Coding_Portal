@@ -22,6 +22,7 @@ module.exports = {
 					if(err){
 						return res.json(500,{err:"Something Went Wrong."});
 					}
+					que.uploads={};
 					que.round=req.param('round');
 					que.save();
 					return res.json(200,{msg:"Successs"});

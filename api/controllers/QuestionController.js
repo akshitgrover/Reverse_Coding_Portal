@@ -47,7 +47,7 @@ module.exports = {
 				if(!q){
 					return res.json(404,{err:"Question you are requesting is not found."});
 				}
-				req.file('file').upload({adapter:require('skipper-gridfs'),uri:'mongodb://Deathadder:***@ds123534.mlab.com:23534/reverse_coding_acm.fs'},function(err,files){
+				req.file('file').upload({adapter:require('skipper-gridfs'),uri:'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'},function(err,files){
 					console.log(err||files);
 					if(files==[]){
 						return res.json(404,{err:"Please Upload The File."})
@@ -56,7 +56,7 @@ module.exports = {
 						return res.json(500,{err:"Something Went Wrong."});
 					}
 					var adapter = require('skipper-gridfs')({
-        				uri: 'mongodb://Deathadder:***@ds123534.mlab.com:23534/reverse_coding_acm.fs'
+        				uri: 'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'
         			});
 					if(req.param('round')=='one'){
 						if(user.roundone[req.param('que')]){
@@ -120,7 +120,7 @@ module.exports = {
 	},
 	download: function(req,res){
     	var adapter = require('skipper-gridfs')({
-        	uri: 'mongodb://Deathadder:***@ds123534.mlab.com:23534/reverse_coding_acm.fs'
+        	uri: 'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'
         });
         var fd = req.param('fd');
         adapter.read(fd, function(err , file) {

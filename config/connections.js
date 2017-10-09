@@ -56,10 +56,10 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  MongoDb: {
+ /* MongoDb: {
     adapter: 'sails-mongo',
     url:'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm'
-  },
+  },*/
 
   /***************************************************************************
   *                                                                          *

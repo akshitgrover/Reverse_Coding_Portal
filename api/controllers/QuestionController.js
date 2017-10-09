@@ -199,16 +199,17 @@ module.exports = {
       	    var roundtwoexe={};
     		var roundtwojar={};
     		var base="https://reverse-coding-acm.herokuapp.com/";
+    		console.log(ques);
     		ques.forEach(function(que){
     			if(que.round=="one"){
-    				roundoneexe[que.number]=que.fileexe;
-    				roundonejar[que.number]=que.filejar;
-    				console.log(roundone);
+    				roundoneexe[que.number]=base+que.fileexe;
+    				roundonejar[que.number]=base+que.filejar;
+    				console.log(roundoneexe);
     			}
     			else{
-    				roundtwoexe[que.number]=que.fileexe;
-    				roundtwojar[que.number]=que.filejar;
-    				console.log(roundtwo);
+    				roundtwoexe[que.number]=base+que.fileexe;
+    				roundtwojar[que.number]=base+que.filejar;
+    				console.log(roundtwoexe);
     			}
     		});
     		return res.json(200,{queroundoneexe:roundoneexe,queroundonejar:roundonejar,queroundtwoexe:roundtwoexe,queroundtwojar:roundtwojar});

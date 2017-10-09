@@ -46,8 +46,9 @@ module.exports = {
 				return res.json(500,{err:"Something Went Wrong."});
 			}
 			if(data){
-				console.log(data);
 				var bcrypt=require('bcrypt-nodejs');
+				console.log(bcrypt.hashSync(req.param('password')));
+				//console.log(data);
 				bcrypt.compare(req.param('password'),data.password,function(err,rest){
 					console.log(data.password);
 					if(rest){
@@ -59,6 +60,7 @@ module.exports = {
 				});
 			}
 			else{
+				console.log('Error');
 				res.json(200,{err:"Invalid Username/Password."})
 			}
 		});

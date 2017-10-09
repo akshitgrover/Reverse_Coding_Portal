@@ -17,11 +17,11 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
- port: process.env.port,
-  hookTimeout: 300000,
-  models: {
-    connection: 'MongoDb'
-  },
+ // port: process.env.port,
+ //  hookTimeout: 300000,
+ //  models: {
+ //    connection: 'MongoDb'
+ //  },
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/

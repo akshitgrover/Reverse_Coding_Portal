@@ -24,6 +24,14 @@ module.exports = {
 					}
 					que.uploads={};
 					que.round=req.param('round');
+					if(que.round == "one"){
+						que.fileexe = "files/q"+que.number+"r1.exe";
+						que.filejar = "files/q"+que.number+"r1.jar";
+					}
+					else{
+						que.fileexe = "files/q"+que.number+"r2.exe";
+						que.filejar = "files/q"+que.number+"r2.jar";
+					}
 					que.save();
 					return res.json(200,{msg:"Successs"});
 				});
@@ -199,8 +207,8 @@ module.exports = {
       	    var roundtwoexe={};
     		var roundtwojar={};
     		var base="https://reverse-coding-acm.herokuapp.com/";
-    		console.log(ques);
     		ques.forEach(function(que){
+    			console.log(que);
     			if(que.round=="one"){
     				roundoneexe[que.number]=base+que.fileexe;
     				roundonejar[que.number]=base+que.filejar;

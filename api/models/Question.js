@@ -18,9 +18,6 @@ module.exports = {
     filejar:{
       type:'string',
     },
-    round:{
-      type:'string',
-    },
   	uploads:{
   		type:'object',
   		defaultsTo:{}

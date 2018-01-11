@@ -31,9 +31,8 @@ module.exports = {
 				data.confirmpassword=data.password;
 				data.email=req.param('email');
 				data.phoneno=req.param('phoneno');
+				data.score = 0;
 				data.expiredtokens=[];
-				data.roundone={};
-				data.roundtwo={};
 				data.save();
 				console.log(data);
 				return res.json(200,{message:"Success."});
@@ -96,6 +95,40 @@ module.exports = {
 					});
 					return res.json(200,{teams:array});
 				});
+			});
+		});
+	},
+	getscore:function(req,res){
+		Team.find({}).sort('score ASC').exec(function(err,data){
+			if(err){
+				return res.json(500,{err:"Something Went Wrong."});
+			}
+			var arr = data.map(function(inst){
+				return {teamname:inst.username,score:inst.score};
+			});
+			console.log(arr);
+			return res.json(200,{data:arr});
+		});
+	},
+	putscore:function(req,res){
+		User.findOne({username:req.param('username')},function(err,data){
+			if(err){
+				return res.json(500,{err:"Something went wrong."});
+			}
+			var bcrypt = require('bcrypt-nodejs');
+			if(!data || !bcrypt.compareSync(req.param('password'),data.password)){
+				return res.json(401,{err:"Not Authorized."});
+			}
+			Team.findOne({username:req.param('teamname')},function(err,data){
+				if(err){
+					return res.json(500,{err:"Something went wrong."});
+				}
+				if(!data){
+					return res.json(404,{err:"No team found."});
+				}
+				data.score += parseInt(req.param('score'));
+				data.save(0);
+				return res.json(200,{msg:"Score increased"});
 			});
 		});
 	}	

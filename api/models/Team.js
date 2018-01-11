@@ -24,11 +24,7 @@ module.exports = {
   	phoneno:{
   		type:'string',
   	},
-  	roundone:{
-  		type:'object',
-  		defaultsTo:{}
-  	},
-    roundtwo:{
+  	uploads:{
       type:'object',
       defaultsTo:{}
     },
@@ -36,6 +32,10 @@ module.exports = {
       type:'array',
       defaultsTo:[]
     },
+    score:{
+      type:'float',
+      defaultsTo:0
+    }
   }
 };
 

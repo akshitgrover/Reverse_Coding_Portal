@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    volumes: 
+      - acmrevc_data:/data/db
+      - acmrevc_config:/data/configdb
+    expose:
+      - "27017"
+  portal_node:
+    image: acmreversec_portal
+    volumes:
+      - acmrevc_uploads:/app/uploads
+    links:
+      - mongo
+    ports:
+      - "1337:1337"
+
+volumes:
+  acmrevc_data:
+  acmrevc_config:
+  acmrevc_uploads:

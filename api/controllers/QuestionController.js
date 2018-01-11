@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  * @baseurl 	:: https://reverse-coding-acm.herokuapp.com/
  */
+var counter = 10;
+var flag = -1;
 
 module.exports = {
 	create:function(req,res){
@@ -23,15 +25,8 @@ module.exports = {
 						return res.json(500,{err:"Something Went Wrong."});
 					}
 					que.uploads={};
-					que.round=req.param('round');
-					if(que.round == "one"){
-						que.fileexe = "files/q"+que.number+"r1.exe";
-						que.filejar = "files/q"+que.number+"r1.jar";
-					}
-					else{
-						que.fileexe = "files/q"+que.number+"r2.exe";
-						que.filejar = "files/q"+que.number+"r2.jar";
-					}
+					que.fileexe = "files/q"+que.number+".exe";
+					que.filejar = "files/q"+que.number+".jar";
 					que.save();
 					return res.json(200,{msg:"Successs"});
 				});
@@ -46,102 +41,66 @@ module.exports = {
 			if(!user || n!=-1){
 				return res.json(500,{err:"You Are Not Authorized, Login Again."});
 			}
-			Question.findOne({number:req.body.que,round:req.body.round},function(err,q){
-				console.log(req.body.que);
-				console.log(req.body.round);
+			Question.findOne({number:req.body.que},function(err,q){
 				if(err){
 					return res.json(500,{err:"Something Went Wrong. Please Upload Again."});
 				}
 				if(!q){
 					return res.json(404,{err:"Question you are requesting is not found."});
 				}
-				req.file('file').upload({adapter:require('skipper-gridfs'),uri:'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'},function(err,files){
-					console.log(err||files);
-					if(files==[]){
-						return res.json(404,{err:"Please Upload The File."})
-					}
-					if(err){
-						return res.json(500,{err:"Something Went Wrong."});
-					}
-					var adapter = require('skipper-gridfs')({
-        				uri: 'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'
-        			});
-					if(req.param('round')=='one'){
-						if(user.roundone[req.param('que')]){
-							adapter.rm(user.roundone[req.param('que')],function(err,data){
-								if(err){
-									return res.json(500,{err:"Something Went Wrong Please Upload Again."});
-								}
-								user.roundone[req.param('que')]=files[0].fd;
-								user.save();			
-								q.uploads[user.username]=files[0].fd;
-								q.save();
-								//console.log(q.uploads);
-								//console.log(user.roundone);
-								return res.json(200,{msg:"Files Uploaded Successfully."});
-							});
-							return;
+				var name = user.username+'_q'+req.body.que;
+				var fs = require('fs');
+				var path = require('path').resolve(sails.config.appPath,'uploads');
+				if(user.uploads[req.body.que]){
+					fs.unlink(path+user.uploads[req.body.que],function(err){
+						if(err){
+							return res.json(500,{err:"Error Uploading File."});
 						}
-						user.roundone[req.param('que')]=files[0].fd;
-						user.save();			
-						q.uploads[user.username]=files[0].fd;
-						q.save();
-						console.log(q.uploads);
-						console.log(user.roundone);
-						return res.json(200,{msg:"Files Uploaded Successfully."});
-					}
-					else if(req.param('round')=='two'){
-						console.log(user.roundtwo[req.param('que')]);
-						if(user.roundtwo[req.param('que')]){
-							adapter.rm(user.roundtwo[req.param('que')],function(err,data){
-								if(err){
-									console.log("err");
-									return res.json(500,{err:"Something Went Wrong Please Upload Again."});
-								}
-								//console.log(data);
-								//console.log("File Deleted");
-								user.roundtwo[req.param('que')]=files[0].fd;
-								user.save();			
-								q.uploads[user.username]=files[0].fd;
-								q.save();
-								//console.log(q.uploads);
-								//console.log(user.roundone);
-								return res.json(200,{msg:"Files Uploaded Successfully."});
-							});
-							return;
+						req.file('upload').upload({dirname:path,saveAs:name},function(err,files){
+							if(err){
+								return res.json(500,{err:"Error Uploading File."});
+							}
+							var ext = require('path').extname(files[0].filename);
+							var base = "";
+							fs.renameSync(path+'/'+name,path+'/'+name+ext);
+							user.uploads[req.body.que] = base+'/'+name+ext;
+							user.save();
+							q.uploads[user.username] = base+'/'+name+ext;
+							q.save(); 
+							return res.json(200,{msg:"Uploaded Successfully."});
+						});
+					});
+				}
+				else{
+					req.file('upload').upload({dirname:path,saveAs:name},function(err,files){
+						if(err){
+							return res.json(500,{err:"Error Uploading File."});
 						}
-						//console.log("parent");
-						user.roundtwo[req.param('que')]=files[0].fd;
+						var ext = require('path').extname(files[0].filename);
+						var base = "";
+						fs.renameSync(path+'/'+name,path+'/'+name+ext);
+						user.uploads[req.body.que] = base+'/'+name+ext; 
 						user.save();
-						q.uploads[user.username]=files[0].fd;
+						q.uploads[user.username] = base+'/'+name+ext;
 						q.save();
-						console.log(q.uploads);
-						console.log(user.roundtwo);
-						return res.json(200,{msg:"Files uploaded Successfully."});
-					}
-					else{
-						return res.json(500,{err:'Something Went Wrong. Please Upload Again.'});
-					}
-				});
+						return res.json(200,{msg:"Uploaded Successfully."});
+					});
+				}
 			});	
 		});
 	},
 	download: function(req,res){
-    	var adapter = require('skipper-gridfs')({
-        	uri: 'mongodb://Deathadder:Deathadder_11@ds123534.mlab.com:23534/reverse_coding_acm.fs'
-        });
-        var fd = req.param('fd');
-        adapter.read(fd, function(err , file) {
+    	var fs = require('fs');
+ 		var fileName = req.param('path');
+        fs.readFile(sails.config.appPath+'/uploads'+fileName, function(err , file) {
             if(err) {
+            	console.log(err);
                 return res.json(500,{err:"Something Went Wrong While Downloading The File."});
             } 
             else {
             	var mime_type=require('mime-types');
-            	var mime = mime_type.contentType(fd);
-            	var id = fd.indexOf('.');
-            	var ext=fd.slice(id);
-            	var filename = req.param('teamname')+'_'+req.param('que')+'_'+req.param('round')+ext;
-                console.log(filename);
+            	var mime = mime_type.contentType(fileName);
+            	var filename = fileName;
                 res.set({
     				"Content-Disposition": 'attachment; filename="'+filename+'"',
     				"Content-Type": mime,
@@ -165,14 +124,14 @@ module.exports = {
 						return res.json(500,{err:"Something Went Wrong."});
 					}
 					var arr=[];
-			    	Question.findOne({number:req.param('que'),round:req.param('round')},function(err,q){
+			    	Question.findOne({number:req.param('que')},function(err,q){
 			    		if(err || !q){
 			    			return res.json(500,{err:"Something Went Wrong, Please Try Again."});
 			    		}
 			    		data.forEach(function(item){
 			    			arr.push(item.username);
 			    		});
-			    		return res.json(200,{filedetails:q.uploads,teamname:arr,quedet:{number:req.param('que'),round:req.param('round')}});
+			    		return res.json(200,{filedetails:q.uploads,teamname:arr,quenum:req.param('que')});
 			    	});
 			    });
 	    	});
@@ -192,35 +151,46 @@ module.exports = {
 		    		if(err || !team){
 		    			return res.json(500,{err:"Something Went Wrong, Please Try Again."});
 		    		}
-		    		return res.json(500,{roundone:team.roundone,roundtwo:team.roundtwo,teamname:req.param('teamname')});
+		    		return res.json(500,{uploads:team.uploads,teamname:req.param('teamname')});
 		    	});
     		});
     	});
     },
     getquestion:function(req,res){
-      	Question.find(function(err,ques){
+    	var timer = new Date().getTime();
+    	if(timer - flag > 10800000 && counter != 15 && flag != -1){
+    		var inc = ((timer-flag)-((timer-flag)%10800000))/10800000;
+    		counter += inc;
+    		flag = timer;
+    	}
+      	Question.find({}).limit(counter).exec(function(err,ques){
       		if(err){
       			return res.json(500,{err:"Something Went Wrong."});
       		}
-      	    var roundoneexe={};
-      	    var roundonejar={};
-      	    var roundtwoexe={};
-    		var roundtwojar={};
-    		var base="https://reverse-coding-acm.herokuapp.com/";
+      	    var filesexe={};
+      	    var filesjar={};
+    		var base="";
     		ques.forEach(function(que){
-    			console.log(que);
-    			if(que.round=="one"){
-    				roundoneexe[que.number]=base+que.fileexe;
-    				roundonejar[que.number]=base+que.filejar;
-    				console.log(roundoneexe);
-    			}
-    			else{
-    				roundtwoexe[que.number]=base+que.fileexe;
-    				roundtwojar[que.number]=base+que.filejar;
-    				console.log(roundtwoexe);
-    			}
+				filesexe[que.number]=base+que.fileexe;
+				filesjar[que.number]=base+que.filejar;
     		});
-    		return res.json(200,{queroundoneexe:roundoneexe,queroundonejar:roundonejar,queroundtwoexe:roundtwoexe,queroundtwojar:roundtwojar});
+    		return res.json(200,{filesexe:filesexe,filesjar:filesjar});
+    	});
+    },
+    start:function(req,res){
+    	var bcrypt = require('bcrypt-nodejs');
+    	User.findOne({username:req.param('username')},function(err,data){
+    		console.log(data);
+    		console.log("Error: " + err);
+    		if(err){
+    			return res.json(500,{});
+    		}
+    		if(!data || !bcrypt.compareSync(req.param('password'),data.password)){
+    			return res.json(401,{});
+    		}
+    		flag = new Date().getTime();
+    		console.log(flag);
+    		return res.json(200,{startTime:flag});
     	});
     }
 };

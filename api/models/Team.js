@@ -32,6 +32,14 @@ module.exports = {
       type:'array',
       defaultsTo:[]
     },
+    marked:{
+      type:'object',
+      defaultsTo:{}
+    },
+    qscores:{
+      type:'object',
+      defaultsTo:{}
+    },
     score:{
       type:'float',
       defaultsTo:0

@@ -20,7 +20,6 @@ module.exports = {
 					return res.json(500,{err:"Invalid Username/Password."});
 				}
 				Question.create({number:req.param('number')},function(err,que){
-					console.log(err);
 					if(err){
 						return res.json(500,{err:"Something Went Wrong."});
 					}
@@ -48,44 +47,25 @@ module.exports = {
 				if(!q){
 					return res.json(404,{err:"Question you are requesting is not found."});
 				}
-				var name = user.username+'_q'+req.body.que;
+				var d = new Date();
+				var time = d.getTime();
+				var name = user.username+'_q'+req.body.que+"_"+time;
 				var fs = require('fs');
 				var path = require('path').resolve(sails.config.appPath,'uploads');
-				if(user.uploads[req.body.que]){
-					fs.unlink(path+user.uploads[req.body.que],function(err){
-						if(err){
-							return res.json(500,{err:"Error Uploading File."});
-						}
-						req.file('upload').upload({dirname:path,saveAs:name},function(err,files){
-							if(err){
-								return res.json(500,{err:"Error Uploading File."});
-							}
-							var ext = require('path').extname(files[0].filename);
-							var base = "";
-							fs.renameSync(path+'/'+name,path+'/'+name+ext);
-							user.uploads[req.body.que] = base+'/'+name+ext;
-							user.save();
-							q.uploads[user.username] = base+'/'+name+ext;
-							q.save(); 
-							return res.json(200,{msg:"Uploaded Successfully."});
-						});
-					});
-				}
-				else{
-					req.file('upload').upload({dirname:path,saveAs:name},function(err,files){
-						if(err){
-							return res.json(500,{err:"Error Uploading File."});
-						}
-						var ext = require('path').extname(files[0].filename);
-						var base = "";
-						fs.renameSync(path+'/'+name,path+'/'+name+ext);
-						user.uploads[req.body.que] = base+'/'+name+ext; 
-						user.save();
-						q.uploads[user.username] = base+'/'+name+ext;
-						q.save();
-						return res.json(200,{msg:"Uploaded Successfully."});
-					});
-				}
+				req.file('upload').upload({dirname:path,saveAs:name},function(err,files){
+					if(err){
+						return res.json(500,{err:"Error Uploading File."});
+					}
+					var ext = require('path').extname(files[0].filename);
+					var base = "";
+					fs.renameSync(path+'/'+name,path+'/'+name+ext);
+					user.uploads[req.body.que] = base+'/'+name+ext;
+					user.marked[req.body.que] = 0; 
+					user.save();
+					q.uploads[user.username] = base+'/'+name+ext;
+					q.save();
+					return res.json(200,{msg:"Uploaded Successfully."});
+				});
 			});	
 		});
 	},
@@ -94,7 +74,6 @@ module.exports = {
  		var fileName = req.param('path');
         fs.readFile(sails.config.appPath+'/uploads'+fileName, function(err , file) {
             if(err) {
-            	console.log(err);
                 return res.json(500,{err:"Something Went Wrong While Downloading The File."});
             } 
             else {

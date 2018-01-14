@@ -8,6 +8,8 @@ RUN npm install
 
 RUN npm install -g sails
 
+ADD /assets /app
+
 ADD . /app
 
 VOLUME /uploads

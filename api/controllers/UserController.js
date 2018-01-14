@@ -19,6 +19,17 @@ module.exports = {
 			user.save();
 			return res.json(200,{msg:"Success"});
 		});
+	},
+	login:function(req,res){
+		User.findOne({username:req.param('username')},function(err,user){
+			if(err){
+				return res.json(500,{err:"Something went wrong."});
+			}
+			if(!user || !bcrypt.compareSync(req.param('password'),user.password)){
+				return res.json(404,{err:"No user found."});
+			}
+			return res.json(200,{msg:"Logged In"});
+		});
 	}
 };
 

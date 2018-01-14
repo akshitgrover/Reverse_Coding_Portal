@@ -9,7 +9,7 @@ services:
     expose:
       - "27017"
   portal_node:
-    image: acmreversec_portal
+    image: akshitgrover/acmreversecoding_portal
     volumes:
       - acmrevc_uploads:/app/uploads
     links:

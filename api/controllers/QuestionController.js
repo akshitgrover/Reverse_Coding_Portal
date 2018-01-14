@@ -24,8 +24,9 @@ module.exports = {
 						return res.json(500,{err:"Something Went Wrong."});
 					}
 					que.uploads={};
-					que.fileexe = "files/q"+que.number+".exe";
-					que.filejar = "files/q"+que.number+".jar";
+					que.filewin = "files/win_final/q"+que.number+".exe";
+					que.filelinux = "files/linux_final/q"+que.number+".o";
+					que.filemac = "files/mac_final/q"+que.number+".o";
 					que.save();
 					return res.json(200,{msg:"Successs"});
 				});
@@ -137,6 +138,7 @@ module.exports = {
     },
     getquestion:function(req,res){
     	var timer = new Date().getTime();
+    	console.log((10800000-timer+flag)/(1000*60*60));
     	if(timer - flag > 10800000 && counter != 15 && flag != -1){
     		var inc = ((timer-flag)-((timer-flag)%10800000))/10800000;
     		counter += inc;
@@ -146,14 +148,16 @@ module.exports = {
       		if(err){
       			return res.json(500,{err:"Something Went Wrong."});
       		}
-      	    var filesexe={};
-      	    var filesjar={};
+      	    var fileswin={};
+      	    var filesmac={};
+      	    var fileslinux={};
     		var base="";
     		ques.forEach(function(que){
-				filesexe[que.number]=base+que.fileexe;
-				filesjar[que.number]=base+que.filejar;
+				fileswin[que.number]=base+que.filewin;
+				fileslinux[que.number]=base+que.filelinux;
+				filesmac[que.number]=base+que.filemac
     		});
-    		return res.json(200,{filesexe:filesexe,filesjar:filesjar});
+    		return res.json(200,{fileswin:fileswin,filesmac:filesmac,fileslinux:fileslinux});
     	});
     },
     start:function(req,res){

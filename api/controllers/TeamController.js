@@ -5,6 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  * @baseurl 	:: https://reverse-coding-acm.herokuapp.com/
  */
+var flag = -1;
 
 module.exports = {
 	'up':function(req,res){
@@ -40,6 +41,9 @@ module.exports = {
 		});
 	},
 	login:function(req,res){
+		if(flag != 1){
+			return res.json(409,{err:"Cannot login, Wait for quiz to start."});
+		}
 		Team.findOne({username:req.param('username')},function(err,data){
 			if(err){
 				return res.json(500,{err:"Something Went Wrong."});
@@ -179,6 +183,16 @@ module.exports = {
 					}
 				});
 			});
+		});
+	},
+	start:function(req,res){
+		var bcrypt = require('bcrypt-nodejs');
+		User.findOne({username:req.param('username')},function(err,data){
+			if(err || !data || !bcrypt.compareSync(req.param('password'),data.password)){
+				return res.json(500,{err:"Error, Cannot Proceed."});
+			}
+			flag = 1;
+			return res.json(200,{msg:"Started"});
 		});
 	}	
 };

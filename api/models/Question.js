@@ -12,10 +12,13 @@ module.exports = {
   		type:'string',
   		required:true
   	},
-  	fileexe:{
+  	filewin:{
   		type:'string',
   	},
-    filejar:{
+    filelinux:{
+      type:'string',
+    },
+    filemac:{
       type:'string',
     },
   	uploads:{

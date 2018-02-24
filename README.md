@@ -41,7 +41,7 @@ In Round 2 Participants were given binary executable files using which they have
 	* Hashing Passwords
 * [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 ...Why? 
-	* Statless Authentication
+	* Stateless Authentication
 * [hacken](https://www.npmjs.com/package/hacken)
 ...Why?
 	* Utility

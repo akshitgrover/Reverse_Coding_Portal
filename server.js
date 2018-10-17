@@ -18,6 +18,10 @@ const QuestionRouter = require("./controllers/question.js");
 const AttemptRouter = require("./controllers/attempts.js");
 const TeamRouter = require("./controllers/team.js");
 
+app.use((req, res)=>{
+    res.set("Access-Control-Allow-Origin", "*");
+});
+
 app.use("/admin", AdminRouter);
 app.use("/question", QuestionRouter);
 app.use("/attempt", AttemptRouter);

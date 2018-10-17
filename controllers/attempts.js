@@ -99,6 +99,9 @@ router.post("/submit", userPolicy, (req, res)=>{
         try {
             
             fs.renameSync(uploadedPath, newPath);
+            boxExec.on("error",(error)=>{
+                return res.status(200).json({score:0, error: boxExec.errortext});
+            });
             boxExec.on("success", ()=>{
                 boxExec.execute();
             });

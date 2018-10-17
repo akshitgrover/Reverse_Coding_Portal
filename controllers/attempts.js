@@ -77,6 +77,7 @@ router.post("/submit", userPolicy, (req, res)=>{
     Question.findOne({number: queNumber}, (err,data)=>{
 
         if(err){
+            console.log(err);
             return res.status(500).json({err:"Something went wrong"});
         }
         if(!data){
@@ -84,6 +85,9 @@ router.post("/submit", userPolicy, (req, res)=>{
         }
         data.attemptCount += 1;
         let lang = config[req.body.lang + "Key"] || 9;
+        if(!req.files.file){
+            return res.status(406).json({err:"Uploaded file is missing"});
+        }
         let uploadedPath = req.files.file.path;
         let extName = path.extname(req.files.file.name);
         let epoch = (new Date()).getTime();
@@ -117,6 +121,7 @@ router.post("/submit", userPolicy, (req, res)=>{
             data.save();
 
         } catch(err){
+            console.log(err);
             return res.status(500).json({err:"Something went wrong"});
         }
 

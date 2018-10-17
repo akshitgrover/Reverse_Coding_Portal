@@ -20,7 +20,7 @@ router.post("/add", adminPolicy, (req, res)=>{
         let numTestCases = req.body.numTestCases || 1;
         let testCasePaths = [];
         let mac = `/static/mac/que_${data.number.toString()}`; //path.join(__dirname, "../uploads/mac/que_" + data.number.toString());
-        let win = `/static/win/que_${data.number.toString()}`; //path.join(__dirname, "../uploads/win/que_" + data.number.toString());
+        let win = `/static/win/que_${data.number.toString()}.exe`; //path.join(__dirname, "../uploads/win/que_" + data.number.toString());
         let linux = `/static/linux/que_${data.number.toString()}`; //path.join(__dirname, "../uploads/linux/que_" + data.number.toString());
 
         for(var count = 0; count < numTestCases; count++){

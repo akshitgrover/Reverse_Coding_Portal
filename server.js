@@ -29,7 +29,9 @@ app.use("/question", QuestionRouter);
 app.use("/attempt", AttemptRouter);
 app.use("/team", TeamRouter);
 
-app.use("/static", express.static(path.join(__dirname, "./uploads")));
+app.use("/static/mac", express.static(path.join(__dirname, "./uploads/mac")));
+app.use("/static/win", express.static(path.join(__dirname, "./uploads/win")));
+app.use("/static/linux", express.static(path.join(__dirname, "./uploads/linux")));
 
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true}, (err, db)=>{
     

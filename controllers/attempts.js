@@ -16,6 +16,9 @@ const userPolicy = require("./../policies/user.js");
 router.post("/submit", userPolicy, (req, res)=>{
 
     let queNumber = req.body.que;
+    if(res.locals.teamName === null){
+        return res.status(406).json({err:"Please join a team before submitting any responses"});
+    }
     let teamName = res.locals.teamName.split(" ").join("");
     let timeStamp = (new Date()).getTime().toString();
     let boxExec = boxConstructor();

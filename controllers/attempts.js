@@ -16,7 +16,7 @@ const userPolicy = require("./../policies/user.js");
 router.post("/submit", userPolicy, (req, res)=>{
 
     let queNumber = req.body.que;
-    let teamName = res.locals.teamName;
+    let teamName = res.locals.teamName.split(" ").join("");
     let timeStamp = (new Date()).getTime().toString();
     let boxExec = boxConstructor();
 

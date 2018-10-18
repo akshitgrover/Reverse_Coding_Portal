@@ -19,7 +19,8 @@ router.post("/submit", userPolicy, (req, res)=>{
     if(res.locals.teamName === null){
         return res.status(406).json({err:"Please join a team before submitting any responses"});
     }
-    let teamName = res.locals.teamName.split(" ").join("");
+    let teamName = res.locals.teamName;
+    let fileTeamStamp = teamName.split(" ").join("")
     let timeStamp = (new Date()).getTime().toString();
     let boxExec = boxConstructor();
 
@@ -97,7 +98,7 @@ router.post("/submit", userPolicy, (req, res)=>{
         let uploadedPath = req.files.file.path;
         let extName = path.extname(req.files.file.name);
         let epoch = (new Date()).getTime();
-        let fileName = [teamName, queNumber, epoch.toString()].join("_");
+        let fileName = [fileTeamStamp, queNumber, epoch.toString()].join("_");
         let newPath = path.join(__dirname, "../uploads/code/" + fileName + extName);
         let testCases = data.testcases;
         

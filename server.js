@@ -19,6 +19,7 @@ const AttemptRouter = require("./controllers/attempts.js");
 const TeamRouter = require("./controllers/team.js");
 
 app.use((req, res, next)=>{
+    console.log(req.url);
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "*");
     next();

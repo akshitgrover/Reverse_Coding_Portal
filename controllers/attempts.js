@@ -47,7 +47,7 @@ router.post("/submit", userPolicy, (req, res)=>{
             ]).exec((err, teamData)=>{
                 if(err){
                     console.log(err);
-                    // return res.status(500).json({err:"Something went wrong"});
+                    return res.status(500).json({err:"Something went wrong"});
                 }
                 let obj = teamData[0];
                 let questionObj = {number:queNumber, score: attempt.score, attempts: [data._id.toString()]};
@@ -55,9 +55,10 @@ router.post("/submit", userPolicy, (req, res)=>{
                     Team.updateOne({name: teamName},{$inc:{score: attempt.score}, $push:{questions: questionObj}}, (err, data)=>{
                         if(err){
                             console.log(err);
-                            // return res.status(500).json({err:"Something went wrong"});
+                            return res.status(500).json({err:"Something went wrong"});
                         }
                         console.log(data);
+                        return res.status(200).json({testCases: attempt.testCaseStats, score: attempt.score});
                         // return res.status(200).json({msg:"Score updated successfully"});
                     });
                 } else{
@@ -66,8 +67,10 @@ router.post("/submit", userPolicy, (req, res)=>{
                     Team.updateOne({name: teamName}, {$inc:{score:incScore}, $push:{questions: questionObj}}, (err, data)=>{
                         if(err){
                             console.log(err);
+                            return res.status(500).json({err:"Something went wrong"});
                         }
                         console.log(data);
+                        return res.status(200).json({testCases: attempt.testCaseStats, score: attempt.score});
                     });
                 }
             });
@@ -121,7 +124,6 @@ router.post("/submit", userPolicy, (req, res)=>{
                     }
                 }
                 // console.log(attempt);
-                res.status(200).json({testCases: attempt.testCaseStats, score: attempt.score});
                 createAttempt(attempt);
             });
             data.save();
